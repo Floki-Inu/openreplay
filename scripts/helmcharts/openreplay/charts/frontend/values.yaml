@@ -59,6 +59,9 @@ ingress:
   cspSnippet: |-
     # Custom CSP snippet here.
   annotations:
+  {{- with .Values.global.customFrontend.ingress.annotations }}
+    {{- toYaml . | nindent 4}}
+  {{- end }}
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "120"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
