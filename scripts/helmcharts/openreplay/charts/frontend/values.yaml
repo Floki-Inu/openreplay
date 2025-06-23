@@ -58,15 +58,12 @@ ingress:
   className: "{{ .Values.global.ingress.controller.ingressClassResource.name }}"
   cspSnippet: |-
     # Custom CSP snippet here.
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "120"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  annotations: 
+  {{- with .Values.global.customFrontend.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   tls:
-    secretName: openreplay-ssl
+    secretName: "{{ .Values.global.customFrontend.ingress.tlsSecretName }}"
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
