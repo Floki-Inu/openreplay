@@ -123,9 +123,22 @@ healthCheck:
     httpGet:
       path: /signup
       port: 8000
+      scheme: HTTP
     initialDelaySeconds: 120
     periodSeconds: 30
     timeoutSeconds: 15
+    successThreshold: 1
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /signup
+      port: 8000
+      scheme: HTTP
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
 
 
 pvc:

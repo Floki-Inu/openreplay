@@ -105,7 +105,7 @@ env:
 healthCheck:
   livenessProbe:
     httpGet:
-      path: /
+      path: /socket.io/
       port: socketio
       scheme: HTTP
     initialDelaySeconds: 60
@@ -115,7 +115,7 @@ healthCheck:
     failureThreshold: 3
   readinessProbe:
     httpGet:
-      path: /
+      path: /socket.io/
       port: socketio
       scheme: HTTP
     initialDelaySeconds: 10
