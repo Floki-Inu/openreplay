@@ -67,7 +67,7 @@ service:
     metrics: 8888
 
 ingress:
-  enabled: true
+  enabled: false
   className: "{{ .Values.global.ingress.controller.ingressClassResource.name }}"
   annotations:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
@@ -102,6 +102,27 @@ env:
   redis: false
   CLEAR_SOCKET_TIME: 720
 
+healthCheck:
+  livenessProbe:
+    httpGet:
+      path: /socket.io/
+      port: socketio
+      scheme: HTTP
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /socket.io/
+      port: socketio
+      scheme: HTTP
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
 
 nodeSelector: {}
 

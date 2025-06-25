@@ -63,7 +63,7 @@ serviceMonitor:
       scrapeTimeout: 10s
 
 ingress:
-  enabled: true
+  enabled: false
   className: "{{ .Values.global.ingress.controller.ingressClassResource.name }}"
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
@@ -104,6 +104,27 @@ env:
   CACHE_ASSETS: true
   BUCKET_NAME: 'uxtesting-records'
 
+healthCheck:
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+      scheme: HTTP
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+      scheme: HTTP
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 3
+    successThreshold: 1
+    failureThreshold: 3
 
 nodeSelector: {}
 

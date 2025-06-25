@@ -67,7 +67,7 @@ service:
     metrics: 8888
 
 ingress:
-  enabled: true
+  enabled: false
   className: "{{ .Values.global.ingress.controller.ingressClassResource.name }}"
   annotations: {}
     # kubernetes.io/ingress.class: nginx
@@ -96,6 +96,28 @@ autoscaling:
 
 env:
   debug: 0
+
+healthCheck:
+  livenessProbe:
+    httpGet:
+      path: /
+      port: peerjs
+      scheme: HTTP
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /
+      port: peerjs
+      scheme: HTTP
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 3
+    successThreshold: 1
+    failureThreshold: 3
 
 nodeSelector: {}
 
