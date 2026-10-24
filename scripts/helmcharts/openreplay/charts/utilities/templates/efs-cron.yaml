@@ -17,10 +17,12 @@ spec:
       backoffLimit: 0 # Don't restart the failed jobs
       template:
         metadata:
-          {{- with .Values.podAnnotations }}
           annotations:
+            # backoffLimit is 0, so a node scale-down mid-run fails the job
+            karpenter.sh/do-not-disrupt: "true"
+            {{- with .Values.podAnnotations }}
             {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{- end }}
         spec:
           restartPolicy: Never
           containers:
@@ -39,7 +41,7 @@ spec:
               {{- if .Values.efsCleaner.retentionHours }}
               {{- $time = mul .Values.efsCleaner.retentionHours 60 }} 
               {{- end}}
-              find /mnt/efs -type f -mmin +{{ $time }} -exec /bin/bash -c "ls -lah {}; rm {}" \;
+              find /mnt/efs -type f -mmin +{{ $time }} -print -delete
               echo "Storage before cleaning"
               echo ${storage}
               echo "Storage after cleaning"
